@@ -1,73 +1,55 @@
-# Welcome to your Lovable project
+SchemeConnect – Verified Government Schemes Platform
+Overview
 
-## Project info
+SchemeConnect is a real-time platform designed to make government schemes safe, transparent, and accessible to everyone.
+It focuses on delivering valid, verified, and easy-to-understand information about schemes, while preventing misinformation and outdated data from spreading.
 
-**URL**: https://lovable.dev/projects/72458de5-1c41-4afe-8309-0ce7dbcba409
+Problem Statement
 
-## How can I edit this code?
+Lack of Awareness: People miss opportunities due to scattered and late scheme information.
 
-There are several ways of editing your application.
+Accessibility Issues: Rural users struggle with English or complex government language.
 
-**Use Lovable**
+Misinformation & Outdated Data: Social media often circulates incomplete or false details.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/72458de5-1c41-4afe-8309-0ce7dbcba409) and start prompting.
+Verification Problem: No simple way to check whether a scheme is authentic or expired.
 
-Changes made via Lovable will be committed automatically to this repo.
+Solution
 
-**Use your preferred IDE**
+SchemeConnect ensures that every user can:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Access verified scheme information from trusted sources.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Use a minimal, user-friendly interface available in Hindi and English.
 
-Follow these steps:
+Receive real-time updates about upcoming and active schemes.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Interact via a voice assistant for ease of use.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Trust the system through AI-based filtering that flags misinformation and expired content.
 
-# Step 3: Install the necessary dependencies.
-npm i
+Key Features
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+Verified Scheme Database: Only authentic or admin-approved schemes are displayed, each marked as Verified, Expired, or Pending Verification.
 
-**Edit a file directly in GitHub**
+Timeline View: Users can explore Upcoming, Current, and Past schemes.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Safe Access: AI filters misinformation and outdated content automatically.
 
-**Use GitHub Codespaces**
+Voice Assistant: Users can search schemes by speaking in Hindi or English.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Notifications: Subscribers get alerts when new schemes launch or eligibility changes.
 
-## What technologies are used for this project?
+Multi-Language Support: Toggle between English and Hindi for better accessibility.
 
-This project is built with:
+Tech Stack
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Frontend: React, Next.js, TailwindCSS
 
-## How can I deploy this project?
+Backend: Node.js, Express, MongoDB
 
-Simply open [Lovable](https://lovable.dev/projects/72458de5-1c41-4afe-8309-0ce7dbcba409) and click on Share -> Publish.
+AI/ML: HuggingFace NLP (misinformation detection), OpenAI Whisper (voice input)
 
-## Can I connect a custom domain to my Lovable project?
+Notifications: Firebase Cloud Messaging
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Deployment: Vercel (frontend), Render/Heroku (backend), MongoDB Atlas
