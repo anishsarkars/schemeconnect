@@ -6,83 +6,68 @@
 
 @layer base {
   :root {
-    /* Core brand colors - Government trustworthy palette */
-    --background: 248 250 252; /* slate-50 */
-    --foreground: 226 29% 13%; /* slate-800 */
+    /* Clean minimal palette inspired by reference designs */
+    --background: 0 0% 100%; /* Pure white */
+    --foreground: 0 0% 9%; /* Near black for text */
 
     --card: 0 0% 100%;
-    --card-foreground: 226 29% 13%;
+    --card-foreground: 0 0% 9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 226 29% 13%;
+    --popover-foreground: 0 0% 9%;
 
-    /* Government blue - trustworthy and official */
-    --primary: 217 91% 40%; /* blue-600 */
+    /* Primary - Clean teal/green like Kitten platform */
+    --primary: 158 64% 52%; /* teal-500 */
     --primary-foreground: 0 0% 100%;
-    --primary-light: 217 100% 50%; /* blue-500 */
-    --primary-dark: 217 91% 30%; /* blue-700 */
+    --primary-light: 158 64% 62%;
+    --primary-dark: 158 64% 42%;
 
-    /* Trust green - for verification and success */
-    --secondary: 166 76% 37%; /* emerald-600 */
-    --secondary-foreground: 0 0% 100%;
-    --secondary-light: 160 84% 39%; /* emerald-500 */
+    /* Secondary - Neutral gray */
+    --secondary: 220 14% 96%; /* gray-100 */
+    --secondary-foreground: 0 0% 9%;
 
-    /* Alert orange - for warnings and notifications */
-    --accent: 32 95% 44%; /* orange-500 */
+    /* Accent - Subtle orange for highlights */  
+    --accent: 32 95% 60%; /* orange-400 */
     --accent-foreground: 0 0% 100%;
 
-    /* Neutral system */
-    --muted: 220 14% 96%; /* slate-100 */
-    --muted-foreground: 220 9% 46%; /* slate-600 */
+    /* Neutral system - Very subtle */
+    --muted: 220 14% 96%; /* gray-100 */
+    --muted-foreground: 0 0% 45%; /* gray-600 */
 
-    --destructive: 0 72% 51%; /* red-500 */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%; /* slate-200 */
+    --border: 220 13% 91%; /* Very light gray borders */
     --input: 220 13% 91%;
-    --ring: 217 91% 40%;
+    --ring: 158 64% 52%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem; /* Smaller radius for cleaner look */
 
-    /* Custom gradients for modern appeal */
+    /* Minimal gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary-light)) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
     
-    /* Shadows for depth */
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.15);
+    /* Subtle shadows */
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+    --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
     
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Clean transitions */
+    --transition-smooth: all 0.2s ease-out;
   }
 
   .dark {
-    /* Core colors for dark mode */
-    --background: 226 29% 8%; /* slate-900 */
-    --foreground: 226 29% 95%; /* slate-100 */
-
-    --card: 226 29% 10%; /* slate-800 */
-    --card-foreground: 226 29% 95%;
-
-    --primary: 217 100% 60%; /* brighter blue for dark mode */
-    --primary-light: 217 100% 70%;
-    --primary-dark: 217 91% 50%;
-
-    --secondary: 160 84% 45%; /* brighter green for dark mode */
-    --secondary-light: 160 84% 55%;
-
-    --muted: 226 29% 15%; /* slate-700 */
-    --muted-foreground: 226 14% 65%; /* slate-400 */
-
-    --border: 226 29% 20%; /* slate-600 */
-    --input: 226 29% 20%;
-    
-    /* Adjusted shadows for dark mode */
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
-    --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.3);
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --primary: 158 64% 52%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
   }
 }
 

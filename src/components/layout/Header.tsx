@@ -67,7 +67,7 @@ export const Header = () => {
                 <Button variant="ghost" size="sm" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button variant="premium" size="sm" asChild>
+                <Button size="sm" asChild>
                   <Link to="/signup">Sign Up</Link>
                 </Button>
               </div>
@@ -103,7 +103,7 @@ export const Header = () => {
                         <Button variant="ghost" className="w-full justify-start" asChild>
                           <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
                         </Button>
-                        <Button variant="premium" className="w-full" asChild>
+                        <Button className="w-full" asChild>
                           <Link to="/signup" onClick={() => setIsOpen(false)}>Sign Up</Link>
                         </Button>
                       </>

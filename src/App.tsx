@@ -8,6 +8,8 @@ import { Footer } from "@/components/layout/Footer";
 import Landing from "./pages/Landing";
 import Schemes from "./pages/Schemes";
 import SchemeDetail from "./pages/SchemeDetail";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +27,8 @@ const App = () => (
               <Route path="/" element={<Landing />} />
               <Route path="/schemes" element={<Schemes />} />
               <Route path="/scheme/:id" element={<SchemeDetail />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
