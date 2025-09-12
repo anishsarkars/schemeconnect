@@ -16,18 +16,18 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
 
-    /* Primary - Clean teal/green like Kitten platform */
-    --primary: 158 64% 52%; /* teal-500 */
+    /* Primary - Premium blue palette */
+    --primary: 221 83% 53%; /* blue-600 */
     --primary-foreground: 0 0% 100%;
-    --primary-light: 158 64% 62%;
-    --primary-dark: 158 64% 42%;
+    --primary-light: 221 83% 65%;
+    --primary-dark: 221 83% 40%;
 
     /* Secondary - Neutral gray */
     --secondary: 220 14% 96%; /* gray-100 */
     --secondary-foreground: 0 0% 9%;
 
-    /* Accent - Subtle orange for highlights */  
-    --accent: 32 95% 60%; /* orange-400 */
+    /* Accent - Electric indigo for gradients */  
+    --accent: 258 90% 66%; /* indigo-500 */
     --accent-foreground: 0 0% 100%;
 
     /* Neutral system - Very subtle */
@@ -39,13 +39,15 @@
 
     --border: 220 13% 91%; /* Very light gray borders */
     --input: 220 13% 91%;
-    --ring: 158 64% 52%;
+    --ring: 221 83% 53%;
 
     --radius: 0.5rem; /* Smaller radius for cleaner look */
 
     /* Minimal gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-light)) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-hero: radial-gradient(60% 100% at 80% 50%, hsl(var(--accent) / 0.35) 0%, transparent 60%),
+      radial-gradient(60% 100% at 20% 40%, hsl(0 0% 100% / 0.6) 0%, transparent 60%),
+      linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--accent) / 0.08));
     
     /* Subtle shadows */
     --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
@@ -78,6 +80,8 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    background-image: radial-gradient(1200px 600px at 20% -10%, rgb(59 130 246 / 0.08), transparent 60%),
+      radial-gradient(1200px 600px at 80% 110%, rgb(99 102 241 / 0.08), transparent 60%);
   }
   
   /* Custom utility classes */
@@ -107,5 +111,14 @@
   
   .transition-smooth {
     transition: var(--transition-smooth);
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-card;
+  }
+  .pill {
+    @apply rounded-full border border-white/20 bg-white/60 backdrop-blur-md shadow-card;
   }
 }
