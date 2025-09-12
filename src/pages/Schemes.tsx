@@ -5,10 +5,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, Filter, Calendar, MapPin, Users, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
+import { Search, Calendar, MapPin, Users, ExternalLink, CheckCircle, AlertCircle, PlusCircle } from 'lucide-react';
 import { sampleSchemes, getSchemesByStatus } from '@/data/sampleSchemes';
 import { Scheme, SchemeCategory } from '@/types/scheme';
 import { Link } from 'react-router-dom';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const categories: { value: SchemeCategory; label: string }[] = [
   { value: 'education', label: 'Education' },
@@ -27,6 +32,7 @@ export default function Schemes() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
   const [activeTab, setActiveTab] = useState('active');
+  const [isSubmitOpen, setIsSubmitOpen] = useState(false);
 
   const filteredSchemes = useMemo(() => {
     let schemes = getSchemesByStatus(activeTab);
@@ -51,6 +57,44 @@ export default function Schemes() {
     
     return schemes;
   }, [activeTab, searchQuery, selectedCategory, selectedLocation]);
+
+  // Form schema for adding a new scheme; keep validations realistic and strict
+  const AddSchemeSchema = z.object({
+    title: z.string().min(8, 'Title must be at least 8 characters'),
+    description: z.string().min(30, 'Description must be at least 30 characters'),
+    category: z.enum(categories.map(c => c.value) as [SchemeCategory, ...SchemeCategory[]]),
+    applyLink: z.string().url('Provide a valid URL').refine((url) => /\.(gov\.in|nic\.in)(?:\/|$)/i.test(url), {
+      message: 'Must be an official .gov.in or .nic.in link',
+    }),
+    deadline: z.string().transform((v) => new Date(v)).refine((d) => d.getTime() > Date.now() + 24*60*60*1000, {
+      message: 'Deadline must be in the future',
+    }),
+    location: z.string().min(2).max(40),
+    tags: z.string().optional(),
+  }).superRefine((val, ctx) => {
+    // prevent duplicates by title (case-insensitive)
+    if (sampleSchemes.some(s => s.title.trim().toLowerCase() === val.title.trim().toLowerCase())) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['title'], message: 'A scheme with this title already exists' });
+    }
+  });
+
+  const form = useForm<z.infer<typeof AddSchemeSchema>>({
+    resolver: zodResolver(AddSchemeSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      category: 'education',
+      applyLink: '',
+      deadline: new Date(Date.now() + 7*24*60*60*1000).toISOString().slice(0,10),
+      location: 'All India',
+      tags: '',
+    } as any,
+  });
+
+  const onSubmit = form.handleSubmit((values) => {
+    // In this demo, we only validate and close; persistence would require backend.
+    setIsSubmitOpen(false);
+  });
 
   const SchemeCard = ({ scheme }: { scheme: Scheme }) => (
     <Card className="shadow-card hover:shadow-card-hover transition-all duration-300 group">
@@ -140,6 +184,108 @@ export default function Schemes() {
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Discover and apply for government schemes with AI-powered verification and smart filtering
           </p>
+          <Dialog open={isSubmitOpen} onOpenChange={setIsSubmitOpen}>
+            <DialogTrigger asChild>
+              <Button className="mt-2"><PlusCircle className="h-4 w-4 mr-2" />Submit a Scheme</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Submit a New Scheme</DialogTitle>
+              </DialogHeader>
+              <Form {...(form as any)}>
+                <form onSubmit={onSubmit} className="space-y-4">
+                  <FormField control={form.control} name="title" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Official scheme title" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+
+                  <FormField control={form.control} name="description" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Concise official description" {...field} />
+                      </FormControl>
+                      <FormDescription>Include purpose, key benefit, and eligibility summary.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <FormField control={form.control} name="category" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {categories.map((c) => (
+                              <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+
+                    <FormField control={form.control} name="deadline" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Application Deadline</FormLabel>
+                        <FormControl>
+                          <Input type="date" value={String(field.value).slice(0,10)} onChange={field.onChange} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                  </div>
+
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <FormField control={form.control} name="applyLink" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Official Apply Link</FormLabel>
+                        <FormControl>
+                          <Input placeholder="https://example.gov.in/..." {...field} />
+                        </FormControl>
+                        <FormDescription>Only .gov.in or .nic.in links are accepted.</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+
+                    <FormField control={form.control} name="location" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Primary Location</FormLabel>
+                        <FormControl>
+                          <Input placeholder="All India / State / Region" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+                  </div>
+
+                  <FormField control={form.control} name="tags" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tags (comma separated)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="scholarship, health, subsidy" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button type="submit">Submit for Review</Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Search and Filters */}
