@@ -11,30 +11,34 @@ export default function Landing() {
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          {/* News Banner */}
+          {/* Trust Badge */}
           <div className="flex justify-center mb-12">
-            <div className="inline-flex items-center gap-3 px-6 py-3 bg-amber-50 border border-amber-200 rounded-full text-sm font-medium shadow-sm">
-              <span className="text-amber-700">News</span>
-              <span className="text-gray-800">Smart Irrigation System Launch</span>
-              <ArrowUpRight className="h-4 w-4 text-amber-600" />
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full text-sm font-medium shadow-sm">
+              <span className="text-green-600">✅</span>
+              <span className="text-green-800">Verified by AI Fact-Check</span>
             </div>
           </div>
 
           {/* Main Title */}
           <div className="text-center mb-12">
-            <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-blue-900 mb-8 leading-tight">
-              Autonomy for<br />every Farm
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-blue-900 mb-8 leading-tight">
+              One Platform. Every Government Scheme.<br />Zero Misinformation.
             </h1>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              Revolutionizing agriculture with AI-powered sensors, drones, and automation for sustainable and efficient farming.
+              Discover verified government schemes — upcoming, active, and past — all in one place. Powered by AI to cut through misinformation and connect citizens with the benefits they truly deserve.
             </p>
           </div>
 
-          {/* CTA Button */}
-          <div className="flex justify-center mb-16">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-md transition-all duration-200 hover:shadow-lg" asChild>
               <Link to="/schemes">
-                Automate now
+                👉 Explore Verified Schemes
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="border-orange-500 text-orange-500 hover:bg-orange-50 px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200" asChild>
+              <Link to="/schemes">
+                👉 Check Your Eligibility
               </Link>
             </Button>
           </div>
