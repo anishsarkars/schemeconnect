@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, User, LogOut, MessageCircle } from 'lucide-react';
+import { Menu, User, LogOut, MessageCircle, Shield } from 'lucide-react';
 import { VoiceAssistant } from '@/components/features/VoiceAssistant';
 import { LanguageToggle } from '@/components/ui/language-toggle';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -24,15 +24,11 @@ export const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2" fill="none" />
-                <path d="M17.66 6.34l-4.24 4.24m0 0l-4.24 4.24m4.24-4.24L6.34 6.34m11.32 11.32l-4.24-4.24" stroke="currentColor" strokeWidth="1.5" fill="none" />
-              </svg>
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <Shield className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-blue-900">
-              Solar
+            <span className="text-xl font-bold text-gray-900">
+              SchemeConnect
             </span>
           </Link>
 
@@ -73,8 +69,8 @@ export const Header = () => {
                 <Button variant="outline" size="sm" className="text-gray-600 hover:text-black border-gray-300" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" asChild>
-                  <Link to="/signup">Get a quote</Link>
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                  <Link to="/signup">Get Started</Link>
                 </Button>
               </div>
             )}
@@ -112,8 +108,8 @@ export const Header = () => {
                         <Button variant="ghost" className="w-full justify-start" asChild>
                           <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
                         </Button>
-                        <Button className="w-full border-gray-300 text-gray-700 hover:bg-gray-50" variant="outline" asChild>
-                          <Link to="/signup" onClick={() => setIsOpen(false)}>Get a quote</Link>
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" asChild>
+                          <Link to="/signup" onClick={() => setIsOpen(false)}>Get Started</Link>
                         </Button>
                       </>
                     )}
