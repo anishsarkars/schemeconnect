@@ -72,6 +72,13 @@ const translations = {
     'landing.features.support': 'Support',
     'landing.features.updates': 'Updates',
     
+    // New Landing Page Content
+    'landing.verifiedBadge': 'Verified Government Schemes',
+    'landing.mainTitle': 'One Platform. Every Government Scheme. Zero Misinformation.',
+    'landing.mainSubtitle': 'Discover verified government schemes — upcoming, active, and past — all in one place. Powered by AI to cut through misinformation and connect citizens with the benefits they truly deserve.',
+    'landing.primaryCta': 'Explore Verified Schemes',
+    'landing.secondaryCta': 'Check Your Eligibility',
+    
     // Schemes Page
     'schemes.title': 'Government Schemes',
     'schemes.subtitle': 'Discover and apply for government schemes with AI-powered verification and smart filtering',
@@ -234,6 +241,13 @@ const translations = {
     'landing.features.notifications': 'सूचनाएं',
     'landing.features.support': 'सहायता',
     'landing.features.updates': 'अपडेट',
+    
+    // New Landing Page Content
+    'landing.verifiedBadge': 'सत्यापित सरकारी योजनाएं',
+    'landing.mainTitle': 'एक प्लेटफ़ॉर्म। हर सरकारी योजना। शून्य गलत सूचना।',
+    'landing.mainSubtitle': 'सत्यापित सरकारी योजनाओं की खोज करें — आगामी, सक्रिय, और पिछली — सभी एक जगह। गलत सूचना को काटने और नागरिकों को उनके वास्तविक लाभों से जोड़ने के लिए AI द्वारा संचालित।',
+    'landing.primaryCta': 'सत्यापित योजनाएं खोजें',
+    'landing.secondaryCta': 'अपनी पात्रता जांचें',
     
     // Schemes Page
     'schemes.title': 'सरकारी योजनाएं',
