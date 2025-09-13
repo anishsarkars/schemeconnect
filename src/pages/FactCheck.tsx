@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Upload, Link as LinkIcon, FileText, CheckCircle, XCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { GeminiFactCheckService } from '@/lib/gemini';
 
 interface FactCheckResult {
   id: string;
@@ -34,32 +35,31 @@ export default function FactCheck() {
 
     setIsAnalyzing(true);
     try {
-      // Simulate API call for fact-checking
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Use Gemini API for fact-checking
+      const factCheckResult = await GeminiFactCheckService.factCheckContent({
+        content: url,
+        type: 'url'
+      });
       
-      const mockResult: FactCheckResult = {
+      const result: FactCheckResult = {
         id: Date.now().toString(),
         url: url,
         title: `Fact-check: ${url}`,
-        status: Math.random() > 0.5 ? 'verified' : 'misleading',
-        confidence: Math.floor(Math.random() * 40) + 60,
-        sources: [
-          'Reuters Fact Check',
-          'Snopes',
-          'PolitiFact',
-          'FactCheck.org'
-        ],
-        summary: 'This content has been analyzed by multiple fact-checking organizations. The claims made in this article have been cross-referenced with official sources and expert opinions.',
+        status: factCheckResult.verdict as FactCheckResult['status'],
+        confidence: factCheckResult.confidence,
+        sources: factCheckResult.sources,
+        summary: factCheckResult.explanation,
         timestamp: new Date()
       };
 
-      setResults(prev => [mockResult, ...prev]);
+      setResults(prev => [result, ...prev]);
       setUrl('');
       toast({
         title: t('factCheck.toast.analysisComplete'),
         description: t('factCheck.toast.analysisCompleteDesc'),
       });
     } catch (error) {
+      console.error('Fact-checking error:', error);
       toast({
         title: t('factCheck.toast.error'),
         description: t('factCheck.toast.errorDesc'),
@@ -73,30 +73,38 @@ export default function FactCheck() {
   const handleFileUpload = async (file: File) => {
     setIsAnalyzing(true);
     try {
-      // Simulate file processing
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Read file content
+      const fileContent = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target?.result as string || '');
+        reader.onerror = reject;
+        reader.readAsText(file);
+      });
       
-      const mockResult: FactCheckResult = {
+      // Use Gemini API for document fact-checking
+      const factCheckResult = await GeminiFactCheckService.factCheckContent({
+        content: fileContent,
+        type: 'document'
+      });
+      
+      const result: FactCheckResult = {
         id: Date.now().toString(),
         url: `Uploaded file: ${file.name}`,
         title: `Document Analysis: ${file.name}`,
-        status: Math.random() > 0.3 ? 'verified' : 'false',
-        confidence: Math.floor(Math.random() * 30) + 70,
-        sources: [
-          'Document Verification System',
-          'Official Database Cross-Reference',
-          'Digital Forensics Analysis'
-        ],
-        summary: 'This document has been analyzed using advanced verification techniques including metadata analysis, content cross-referencing, and digital signature verification.',
+        status: factCheckResult.verdict as FactCheckResult['status'],
+        confidence: factCheckResult.confidence,
+        sources: factCheckResult.sources,
+        summary: factCheckResult.explanation,
         timestamp: new Date()
       };
 
-      setResults(prev => [mockResult, ...prev]);
+      setResults(prev => [result, ...prev]);
       toast({
         title: t('factCheck.toast.fileAnalyzed'),
         description: t('factCheck.toast.fileAnalyzedDesc'),
       });
     } catch (error) {
+      console.error('File analysis error:', error);
       toast({
         title: t('factCheck.toast.error'),
         description: t('factCheck.toast.fileErrorDesc'),

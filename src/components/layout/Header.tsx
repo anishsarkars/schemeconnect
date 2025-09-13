@@ -19,7 +19,7 @@ export const Header = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-white/20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -40,8 +40,8 @@ export const Header = () => {
                 to={item.href}
                 className={`text-sm font-medium transition-colors ${
                   item.current
-                    ? 'text-black'
-                    : 'text-gray-600 hover:text-black'
+                    ? 'text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900'
                 }`}
               >
                 {item.name}

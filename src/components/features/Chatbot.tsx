@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { sampleSchemes, searchSchemes } from '@/data/sampleSchemes';
 import { Scheme } from '@/types/scheme';
+import { GeminiFactCheckService } from '@/lib/gemini';
 
 interface ChatMessage {
   id: string;
@@ -95,6 +96,16 @@ export const Chatbot = ({ className }: ChatbotProps) => {
   const generateResponse = async (query: string): Promise<string> => {
     const lowerQuery = query.toLowerCase();
     
+    // Check if this is a fact-checking question
+    if (lowerQuery.includes('fact check') || lowerQuery.includes('verify') || lowerQuery.includes('true') || lowerQuery.includes('false')) {
+      try {
+        return await GeminiFactCheckService.chatFactCheck(query);
+      } catch (error) {
+        console.error('Gemini API error:', error);
+        return 'I apologize, but I encountered an error while fact-checking. Please try again later.';
+      }
+    }
+    
     // Search for relevant schemes
     const relevantSchemes = searchSchemes(query);
     
@@ -112,45 +123,24 @@ export const Chatbot = ({ className }: ChatbotProps) => {
 ${scheme.isVerified ? '✅ This scheme is verified and authentic.' : '⚠️ Please verify this information independently.'}`;
     }
     
-    // Handle specific queries
-    if (lowerQuery.includes('scholarship') || lowerQuery.includes('education')) {
-      return `I found several education schemes available:
+    // Use Gemini for general queries about government schemes
+    try {
+      return await GeminiFactCheckService.chatFactCheck(query);
+    } catch (error) {
+      console.error('Gemini API error:', error);
+      
+      // Fallback to local responses
+      if (lowerQuery.includes('scholarship') || lowerQuery.includes('education')) {
+        return `I found several education schemes available:
 
 1. **PM Scholarship Scheme 2024** - Financial assistance for meritorious students
 2. **Beti Bachao Beti Padhao** - Girl child education initiative
 3. **Skill India Mission** - Skill development programs
 
 All these schemes are currently active and accepting applications. Would you like detailed information about any specific scheme?`;
-    }
-    
-    if (lowerQuery.includes('health') || lowerQuery.includes('medical')) {
-      return `For health-related schemes, I found:
-
-1. **Ayushman Bharat - PM-JAY** - Free medical coverage up to ₹5 lakh per family
-2. **Pradhan Mantri Vaya Vandana Yojana** - Senior citizen pension scheme
-
-These are verified government schemes with high authenticity scores.`;
-    }
-    
-    if (lowerQuery.includes('agriculture') || lowerQuery.includes('farmer')) {
-      return `Agricultural schemes available:
-
-1. **PM Kisan Samman Nidhi** - ₹6,000 annual income support for farmers
-2. **Pradhan Mantri Ujjwala Yojana** - Free LPG connections for rural women
-
-Both schemes are verified and have helped millions of beneficiaries.`;
-    }
-    
-    if (lowerQuery.includes('housing') || lowerQuery.includes('pradhan mantri awas')) {
-      return `Housing schemes include:
-
-1. **Pradhan Mantri Awas Yojana - Urban** - Affordable housing with interest subsidy
-2. Various state-level housing schemes
-
-These are legitimate government initiatives for affordable housing.`;
-    }
-    
-    return `I can help you with information about various government schemes including:
+      }
+      
+      return `I can help you with information about various government schemes including:
 - Education and scholarship programs
 - Health and medical coverage schemes
 - Agricultural and farmer support programs
@@ -159,41 +149,57 @@ These are legitimate government initiatives for affordable housing.`;
 - Skill development programs
 
 Please ask me about any specific scheme or category you're interested in!`;
+    }
   };
 
   const performFactCheck = async (query: string, response: string) => {
-    // Simulate fact-checking process
-    const lowerQuery = query.toLowerCase();
-    const lowerResponse = response.toLowerCase();
-    
-    // Check if response contains verified information
-    const hasVerifiedInfo = lowerResponse.includes('verified') || 
-                           lowerResponse.includes('authentic') || 
-                           lowerResponse.includes('government');
-    
-    // Check for potential misinformation indicators
-    const hasWarningSigns = lowerQuery.includes('fake') || 
-                           lowerQuery.includes('scam') || 
-                           lowerResponse.includes('unverified');
-    
-    let confidence = 85;
-    let warning = '';
-    
-    if (hasVerifiedInfo) {
-      confidence = 95;
+    try {
+      // Use Gemini API for fact-checking
+      const factCheckResult = await GeminiFactCheckService.factCheckContent({
+        content: `${query}\n\nResponse: ${response}`,
+        type: 'text'
+      });
+      
+      return {
+        isVerified: factCheckResult.isVerified,
+        confidence: factCheckResult.confidence,
+        source: 'Gemini AI Fact-Check',
+        warning: factCheckResult.verdict === 'unverified' ? 'Please verify this information from official sources' : undefined
+      };
+    } catch (error) {
+      console.error('Fact-checking error:', error);
+      
+      // Fallback to basic fact-checking
+      const lowerQuery = query.toLowerCase();
+      const lowerResponse = response.toLowerCase();
+      
+      const hasVerifiedInfo = lowerResponse.includes('verified') || 
+                             lowerResponse.includes('authentic') || 
+                             lowerResponse.includes('government');
+      
+      const hasWarningSigns = lowerQuery.includes('fake') || 
+                             lowerQuery.includes('scam') || 
+                             lowerResponse.includes('unverified');
+      
+      let confidence = 85;
+      let warning = '';
+      
+      if (hasVerifiedInfo) {
+        confidence = 95;
+      }
+      
+      if (hasWarningSigns) {
+        confidence = 60;
+        warning = 'Please verify this information from official government sources';
+      }
+      
+      return {
+        isVerified: confidence > 80,
+        confidence,
+        source: 'Basic Analysis',
+        warning: warning || undefined
+      };
     }
-    
-    if (hasWarningSigns) {
-      confidence = 60;
-      warning = 'Please verify this information from official government sources';
-    }
-    
-    return {
-      isVerified: confidence > 80,
-      confidence,
-      source: 'Government Database',
-      warning: warning || undefined
-    };
   };
 
   const findRelatedSchemes = (query: string): Scheme[] => {
