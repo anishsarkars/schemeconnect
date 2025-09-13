@@ -14,10 +14,8 @@ export const Header = () => {
   const { t } = useLanguage();
 
   const navigation = [
-    { name: 'Solutions', href: '/schemes', current: location.pathname === '/schemes' },
-    { name: 'Farm Management', href: '/farm-management', current: location.pathname === '/farm-management' },
-    { name: 'Analytics', href: '/analytics', current: location.pathname === '/analytics' },
-    { name: 'Contact', href: '/contact', current: location.pathname === '/contact' },
+    { name: 'Schemes Search', href: '/schemes', current: location.pathname === '/schemes' },
+    { name: 'Fact Checker', href: '/fact-check', current: location.pathname === '/fact-check' },
   ];
 
   return (
