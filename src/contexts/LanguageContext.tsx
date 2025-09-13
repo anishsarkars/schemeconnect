@@ -1,0 +1,370 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+type Language = 'en' | 'hi';
+
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string) => string;
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+// Translation data
+const translations = {
+  en: {
+    // Navigation
+    'nav.home': 'Home',
+    'nav.schemes': 'Schemes',
+    'nav.factCheck': 'Fact Check',
+    'nav.chatAssistant': 'Chat Assistant',
+    'nav.login': 'Login',
+    'nav.signUp': 'Sign Up',
+    'nav.profile': 'Profile',
+    'nav.logout': 'Logout',
+    
+    // Fact Check Page
+    'factCheck.title': 'Fact Check Validator',
+    'factCheck.subtitle': 'Verify the authenticity of news articles, documents, and online content. Upload files or paste URLs to get instant fact-checking results.',
+    'factCheck.checkUrl': 'Check URL',
+    'factCheck.checkUrlDesc': 'Paste a link to analyze news articles or web content',
+    'factCheck.uploadDocument': 'Upload Document',
+    'factCheck.uploadDocumentDesc': 'Upload PDF, Word, or image files for verification',
+    'factCheck.urlPlaceholder': 'https://example.com/news-article',
+    'factCheck.dragDropText': 'Drag and drop a file here, or click to browse',
+    'factCheck.chooseFile': 'Choose File',
+    'factCheck.analyzing': 'Analyzing...',
+    'factCheck.processing': 'Processing...',
+    'factCheck.verificationResults': 'Verification Results',
+    'factCheck.confidence': 'Confidence',
+    'factCheck.analyzed': 'Analyzed',
+    'factCheck.sourcesConsulted': 'Sources Consulted',
+    'factCheck.howItWorks': 'How It Works',
+    'factCheck.step1': 'Submit Content',
+    'factCheck.step1Desc': 'Upload a document or paste a URL to get started',
+    'factCheck.step2': 'AI Analysis',
+    'factCheck.step2Desc': 'Our system analyzes content using multiple verification methods',
+    'factCheck.step3': 'Get Results',
+    'factCheck.step3Desc': 'Receive detailed fact-check results with confidence scores',
+    'factCheck.status.verified': 'Verified',
+    'factCheck.status.false': 'False',
+    'factCheck.status.misleading': 'Misleading',
+    'factCheck.status.unverified': 'Unverified',
+    'factCheck.toast.analysisComplete': 'Analysis Complete',
+    'factCheck.toast.analysisCompleteDesc': 'Your content has been fact-checked successfully.',
+    'factCheck.toast.fileAnalyzed': 'File Analyzed',
+    'factCheck.toast.fileAnalyzedDesc': 'Your document has been processed and fact-checked.',
+    'factCheck.toast.error': 'Error',
+    'factCheck.toast.errorDesc': 'Failed to analyze the content. Please try again.',
+    'factCheck.toast.fileErrorDesc': 'Failed to process the file. Please try again.',
+    
+    // Landing Page
+    'landing.trustedBy': 'Trusted by 1000+ citizens',
+    'landing.title': 'From Chaos To Clarity—For Every',
+    'landing.titleHighlight': 'Government Scheme',
+    'landing.subtitle': 'Automated eligibility, research prompts, and application-ready flows—built for everyone.',
+    'landing.generateWorkflow': 'Generate My Workflow',
+    'landing.exploreSchemes': 'Explore Schemes',
+    'landing.features.eligibility': 'Eligibility',
+    'landing.features.docs': 'Docs',
+    'landing.features.deadlines': 'Deadlines',
+    'landing.features.notifications': 'Notifications',
+    'landing.features.support': 'Support',
+    'landing.features.updates': 'Updates',
+    
+    // Schemes Page
+    'schemes.title': 'Government Schemes',
+    'schemes.subtitle': 'Discover and apply for government schemes with AI-powered verification and smart filtering',
+    'schemes.submitScheme': 'Submit a Scheme',
+    'schemes.searchPlaceholder': 'Search schemes by title, description, or tags...',
+    'schemes.allCategories': 'All Categories',
+    'schemes.allLocations': 'All Locations',
+    'schemes.upcoming': 'Upcoming',
+    'schemes.current': 'Current',
+    'schemes.past': 'Past',
+    'schemes.upcomingSchemes': 'Upcoming Schemes',
+    'schemes.currentSchemes': 'Current Active Schemes',
+    'schemes.pastSchemes': 'Past Schemes',
+    'schemes.schemes': 'schemes',
+    'schemes.noUpcomingFound': 'No upcoming schemes found',
+    'schemes.noUpcomingDesc': 'Try adjusting your filters or check back later for new schemes.',
+    'schemes.noActiveFound': 'No active schemes found',
+    'schemes.noActiveDesc': 'Try adjusting your filters to find relevant schemes.',
+    'schemes.noPastFound': 'No past schemes found',
+    'schemes.noPastDesc': 'Try adjusting your filters or explore current schemes.',
+    'schemes.viewDetails': 'View Details',
+    'schemes.apply': 'Apply',
+    'schemes.deadline': 'Deadline',
+    'schemes.beneficiaries': 'beneficiaries',
+    'schemes.aiVerified': 'AI Verified',
+    'schemes.more': 'more',
+    'schemes.submitNewScheme': 'Submit a New Scheme',
+    'schemes.form.title': 'Title',
+    'schemes.form.titlePlaceholder': 'Official scheme title',
+    'schemes.form.description': 'Description',
+    'schemes.form.descriptionPlaceholder': 'Concise official description',
+    'schemes.form.descriptionHelp': 'Include purpose, key benefit, and eligibility summary.',
+    'schemes.form.category': 'Category',
+    'schemes.form.deadline': 'Application Deadline',
+    'schemes.form.applyLink': 'Official Apply Link',
+    'schemes.form.applyLinkPlaceholder': 'https://example.gov.in/...',
+    'schemes.form.applyLinkHelp': 'Only .gov.in or .nic.in links are accepted.',
+    'schemes.form.location': 'Primary Location',
+    'schemes.form.locationPlaceholder': 'All India / State / Region',
+    'schemes.form.tags': 'Tags (comma separated)',
+    'schemes.form.tagsPlaceholder': 'scholarship, health, subsidy',
+    'schemes.form.submit': 'Submit for Review',
+    'schemes.categories.education': 'Education',
+    'schemes.categories.health': 'Health',
+    'schemes.categories.agriculture': 'Agriculture',
+    'schemes.categories.ruralDevelopment': 'Rural Development',
+    'schemes.categories.womenEmpowerment': 'Women Empowerment',
+    'schemes.categories.employment': 'Employment',
+    'schemes.categories.housing': 'Housing',
+    'schemes.categories.skillDevelopment': 'Skill Development',
+    'schemes.categories.seniorCitizen': 'Senior Citizen',
+    
+    // Scheme Detail Page
+    'schemeDetail.notFound': 'Scheme Not Found',
+    'schemeDetail.notFoundDesc': 'The scheme you\'re looking for doesn\'t exist or has been removed.',
+    'schemeDetail.browseAll': 'Browse All Schemes',
+    'schemeDetail.backToSchemes': 'Back to Schemes',
+    'schemeDetail.keyInformation': 'Key Information',
+    'schemeDetail.applicationDeadline': 'Application Deadline',
+    'schemeDetail.coverageArea': 'Coverage Area',
+    'schemeDetail.targetBeneficiaries': 'Target Beneficiaries',
+    'schemeDetail.launchDate': 'Launch Date',
+    'schemeDetail.people': 'people',
+    'schemeDetail.eligibilityCriteria': 'Eligibility Criteria',
+    'schemeDetail.requiredDocuments': 'Required Documents',
+    'schemeDetail.readyToApply': 'Ready to Apply?',
+    'schemeDetail.applyDescription': 'Apply directly through the official government portal',
+    'schemeDetail.applyNow': 'Apply Now',
+    'schemeDetail.relatedTags': 'Related Tags',
+    'schemeDetail.aiVerification': 'AI Verification',
+    'schemeDetail.authenticityScore': 'Authenticity Score',
+    'schemeDetail.verificationDesc': 'This scheme has been verified by our AI system against official government databases and documentation for authenticity and accuracy.',
+    'schemeDetail.verifiedWithSources': 'Verified with official sources',
+    
+    // Coming Soon Page
+    'comingSoon.workingHard': 'We\'re working hard to bring you this feature. Stay tuned for updates!',
+    'comingSoon.getNotified': 'Get notified when it\'s ready',
+    'comingSoon.backToHome': 'Back to Home',
+    'comingSoon.browseSchemes': 'Browse Schemes',
+    'comingSoon.questions': 'Questions? Contact us at',
+    
+    // Footer
+    'footer.description': 'AI-powered government scheme discovery platform helping citizens find and access legitimate government benefits with confidence.',
+    'footer.platform': 'Platform',
+    'footer.browseSchemes': 'Browse Schemes',
+    'footer.howItWorks': 'How it Works',
+    'footer.aiVerification': 'AI Verification',
+    'footer.voiceAssistant': 'Voice Assistant',
+    'footer.support': 'Support',
+    'footer.helpCenter': 'Help Center',
+    'footer.contactUs': 'Contact Us',
+    'footer.faq': 'FAQ',
+    'footer.privacyPolicy': 'Privacy Policy',
+    'footer.resources': 'Resources',
+    'footer.governmentPortal': 'Government Portal',
+    'footer.officialSchemes': 'Official Schemes',
+    'footer.documentation': 'Documentation',
+    'footer.apiAccess': 'API Access',
+    'footer.contact': 'Contact',
+    'footer.copyright': 'All rights reserved.',
+    'footer.termsOfService': 'Terms of Service',
+    'footer.cookiePolicy': 'Cookie Policy',
+  },
+  hi: {
+    // Navigation
+    'nav.home': 'होम',
+    'nav.schemes': 'योजनाएं',
+    'nav.factCheck': 'तथ्य जांच',
+    'nav.chatAssistant': 'चैट सहायक',
+    'nav.login': 'लॉगिन',
+    'nav.signUp': 'साइन अप',
+    'nav.profile': 'प्रोफ़ाइल',
+    'nav.logout': 'लॉगआउट',
+    
+    // Fact Check Page
+    'factCheck.title': 'तथ्य जांच सत्यापनकर्ता',
+    'factCheck.subtitle': 'समाचार लेखों, दस्तावेजों और ऑनलाइन सामग्री की प्रामाणिकता सत्यापित करें। तत्काल तथ्य-जांच परिणाम प्राप्त करने के लिए फ़ाइलें अपलोड करें या URL पेस्ट करें।',
+    'factCheck.checkUrl': 'URL जांचें',
+    'factCheck.checkUrlDesc': 'समाचार लेखों या वेब सामग्री का विश्लेषण करने के लिए एक लिंक पेस्ट करें',
+    'factCheck.uploadDocument': 'दस्तावेज़ अपलोड करें',
+    'factCheck.uploadDocumentDesc': 'सत्यापन के लिए PDF, Word, या छवि फ़ाइलें अपलोड करें',
+    'factCheck.urlPlaceholder': 'https://example.com/news-article',
+    'factCheck.dragDropText': 'यहां एक फ़ाइल खींचें और छोड़ें, या ब्राउज़ करने के लिए क्लिक करें',
+    'factCheck.chooseFile': 'फ़ाइल चुनें',
+    'factCheck.analyzing': 'विश्लेषण कर रहे हैं...',
+    'factCheck.processing': 'प्रसंस्करण...',
+    'factCheck.verificationResults': 'सत्यापन परिणाम',
+    'factCheck.confidence': 'विश्वसनीयता',
+    'factCheck.analyzed': 'विश्लेषित',
+    'factCheck.sourcesConsulted': 'सलाह ली गई स्रोत:',
+    'factCheck.howItWorks': 'यह कैसे काम करता है',
+    'factCheck.step1': 'सामग्री सबमिट करें',
+    'factCheck.step1Desc': 'शुरू करने के लिए एक दस्तावेज़ अपलोड करें या URL पेस्ट करें',
+    'factCheck.step2': 'AI विश्लेषण',
+    'factCheck.step2Desc': 'हमारी प्रणाली कई सत्यापन विधियों का उपयोग करके सामग्री का विश्लेषण करती है',
+    'factCheck.step3': 'परिणाम प्राप्त करें',
+    'factCheck.step3Desc': 'विश्वसनीयता स्कोर के साथ विस्तृत तथ्य-जांच परिणाम प्राप्त करें',
+    'factCheck.status.verified': 'सत्यापित',
+    'factCheck.status.false': 'गलत',
+    'factCheck.status.misleading': 'भ्रामक',
+    'factCheck.status.unverified': 'असत्यापित',
+    'factCheck.toast.analysisComplete': 'विश्लेषण पूर्ण',
+    'factCheck.toast.analysisCompleteDesc': 'आपकी सामग्री का सफलतापूर्वक तथ्य-जांच किया गया है।',
+    'factCheck.toast.fileAnalyzed': 'फ़ाइल विश्लेषित',
+    'factCheck.toast.fileAnalyzedDesc': 'आपके दस्तावेज़ को संसाधित और तथ्य-जांच किया गया है।',
+    'factCheck.toast.error': 'त्रुटि',
+    'factCheck.toast.errorDesc': 'सामग्री का विश्लेषण करने में विफल। कृपया पुनः प्रयास करें।',
+    'factCheck.toast.fileErrorDesc': 'फ़ाइल को संसाधित करने में विफल। कृपया पुनः प्रयास करें।',
+    
+    // Landing Page
+    'landing.trustedBy': '1000+ नागरिकों द्वारा भरोसेमंद',
+    'landing.title': 'अराजकता से स्पष्टता तक—हर',
+    'landing.titleHighlight': 'सरकारी योजना के लिए',
+    'landing.subtitle': 'स्वचालित पात्रता, अनुसंधान प्रॉम्प्ट्स, और आवेदन-तैयार प्रवाह—सभी के लिए बनाया गया।',
+    'landing.generateWorkflow': 'मेरा वर्कफ़्लो बनाएं',
+    'landing.exploreSchemes': 'योजनाएं खोजें',
+    'landing.features.eligibility': 'पात्रता',
+    'landing.features.docs': 'दस्तावेज़',
+    'landing.features.deadlines': 'समय सीमा',
+    'landing.features.notifications': 'सूचनाएं',
+    'landing.features.support': 'सहायता',
+    'landing.features.updates': 'अपडेट',
+    
+    // Schemes Page
+    'schemes.title': 'सरकारी योजनाएं',
+    'schemes.subtitle': 'AI-संचालित सत्यापन और स्मार्ट फ़िल्टरिंग के साथ सरकारी योजनाओं की खोज करें और आवेदन करें',
+    'schemes.submitScheme': 'एक योजना सबमिट करें',
+    'schemes.searchPlaceholder': 'शीर्षक, विवरण, या टैग के अनुसार योजनाएं खोजें...',
+    'schemes.allCategories': 'सभी श्रेणियां',
+    'schemes.allLocations': 'सभी स्थान',
+    'schemes.upcoming': 'आगामी',
+    'schemes.current': 'वर्तमान',
+    'schemes.past': 'पिछली',
+    'schemes.upcomingSchemes': 'आगामी योजनाएं',
+    'schemes.currentSchemes': 'वर्तमान सक्रिय योजनाएं',
+    'schemes.pastSchemes': 'पिछली योजनाएं',
+    'schemes.schemes': 'योजनाएं',
+    'schemes.noUpcomingFound': 'कोई आगामी योजना नहीं मिली',
+    'schemes.noUpcomingDesc': 'अपने फ़िल्टर को समायोजित करने का प्रयास करें या नई योजनाओं के लिए बाद में जांचें।',
+    'schemes.noActiveFound': 'कोई सक्रिय योजना नहीं मिली',
+    'schemes.noActiveDesc': 'प्रासंगिक योजनाएं खोजने के लिए अपने फ़िल्टर को समायोजित करने का प्रयास करें।',
+    'schemes.noPastFound': 'कोई पिछली योजना नहीं मिली',
+    'schemes.noPastDesc': 'अपने फ़िल्टर को समायोजित करने का प्रयास करें या वर्तमान योजनाओं का अन्वेषण करें।',
+    'schemes.viewDetails': 'विवरण देखें',
+    'schemes.apply': 'आवेदन करें',
+    'schemes.deadline': 'समय सीमा',
+    'schemes.beneficiaries': 'लाभार्थी',
+    'schemes.aiVerified': 'AI सत्यापित',
+    'schemes.more': 'और',
+    'schemes.submitNewScheme': 'एक नई योजना सबमिट करें',
+    'schemes.form.title': 'शीर्षक',
+    'schemes.form.titlePlaceholder': 'आधिकारिक योजना शीर्षक',
+    'schemes.form.description': 'विवरण',
+    'schemes.form.descriptionPlaceholder': 'संक्षिप्त आधिकारिक विवरण',
+    'schemes.form.descriptionHelp': 'उद्देश्य, मुख्य लाभ, और पात्रता सारांश शामिल करें।',
+    'schemes.form.category': 'श्रेणी',
+    'schemes.form.deadline': 'आवेदन समय सीमा',
+    'schemes.form.applyLink': 'आधिकारिक आवेदन लिंक',
+    'schemes.form.applyLinkPlaceholder': 'https://example.gov.in/...',
+    'schemes.form.applyLinkHelp': 'केवल .gov.in या .nic.in लिंक स्वीकार किए जाते हैं।',
+    'schemes.form.location': 'प्राथमिक स्थान',
+    'schemes.form.locationPlaceholder': 'पूरे भारत / राज्य / क्षेत्र',
+    'schemes.form.tags': 'टैग (अल्पविराम से अलग)',
+    'schemes.form.tagsPlaceholder': 'छात्रवृत्ति, स्वास्थ्य, सब्सिडी',
+    'schemes.form.submit': 'समीक्षा के लिए सबमिट करें',
+    'schemes.categories.education': 'शिक्षा',
+    'schemes.categories.health': 'स्वास्थ्य',
+    'schemes.categories.agriculture': 'कृषि',
+    'schemes.categories.ruralDevelopment': 'ग्रामीण विकास',
+    'schemes.categories.womenEmpowerment': 'महिला सशक्तिकरण',
+    'schemes.categories.employment': 'रोजगार',
+    'schemes.categories.housing': 'आवास',
+    'schemes.categories.skillDevelopment': 'कौशल विकास',
+    'schemes.categories.seniorCitizen': 'वरिष्ठ नागरिक',
+    
+    // Scheme Detail Page
+    'schemeDetail.notFound': 'योजना नहीं मिली',
+    'schemeDetail.notFoundDesc': 'आप जिस योजना की तलाश कर रहे हैं वह मौजूद नहीं है या हटा दी गई है।',
+    'schemeDetail.browseAll': 'सभी योजनाएं ब्राउज़ करें',
+    'schemeDetail.backToSchemes': 'योजनाओं पर वापस जाएं',
+    'schemeDetail.keyInformation': 'मुख्य जानकारी',
+    'schemeDetail.applicationDeadline': 'आवेदन समय सीमा',
+    'schemeDetail.coverageArea': 'कवरेज क्षेत्र',
+    'schemeDetail.targetBeneficiaries': 'लक्षित लाभार्थी',
+    'schemeDetail.launchDate': 'लॉन्च तिथि',
+    'schemeDetail.people': 'लोग',
+    'schemeDetail.eligibilityCriteria': 'पात्रता मानदंड',
+    'schemeDetail.requiredDocuments': 'आवश्यक दस्तावेज़',
+    'schemeDetail.readyToApply': 'आवेदन करने के लिए तैयार?',
+    'schemeDetail.applyDescription': 'आधिकारिक सरकारी पोर्टल के माध्यम से सीधे आवेदन करें',
+    'schemeDetail.applyNow': 'अभी आवेदन करें',
+    'schemeDetail.relatedTags': 'संबंधित टैग',
+    'schemeDetail.aiVerification': 'AI सत्यापन',
+    'schemeDetail.authenticityScore': 'प्रामाणिकता स्कोर',
+    'schemeDetail.verificationDesc': 'इस योजना को हमारी AI प्रणाली द्वारा प्रामाणिकता और सटीकता के लिए आधिकारिक सरकारी डेटाबेस और दस्तावेजों के खिलाफ सत्यापित किया गया है।',
+    'schemeDetail.verifiedWithSources': 'आधिकारिक स्रोतों के साथ सत्यापित',
+    
+    // Coming Soon Page
+    'comingSoon.workingHard': 'हम इस सुविधा को आपके लिए लाने के लिए कड़ी मेहनत कर रहे हैं। अपडेट के लिए बने रहें!',
+    'comingSoon.getNotified': 'जब यह तैयार हो तो सूचित हो जाएं',
+    'comingSoon.backToHome': 'होम पर वापस जाएं',
+    'comingSoon.browseSchemes': 'योजनाएं ब्राउज़ करें',
+    'comingSoon.questions': 'प्रश्न? हमसे संपर्क करें',
+    
+    // Footer
+    'footer.description': 'AI-संचालित सरकारी योजना खोज प्लेटफ़ॉर्म जो नागरिकों को आत्मविश्वास के साथ वैध सरकारी लाभ खोजने और एक्सेस करने में मदद करता है।',
+    'footer.platform': 'प्लेटफ़ॉर्म',
+    'footer.browseSchemes': 'योजनाएं ब्राउज़ करें',
+    'footer.howItWorks': 'यह कैसे काम करता है',
+    'footer.aiVerification': 'AI सत्यापन',
+    'footer.voiceAssistant': 'वॉइस असिस्टेंट',
+    'footer.support': 'सहायता',
+    'footer.helpCenter': 'सहायता केंद्र',
+    'footer.contactUs': 'हमसे संपर्क करें',
+    'footer.faq': 'अक्सर पूछे जाने वाले प्रश्न',
+    'footer.privacyPolicy': 'गोपनीयता नीति',
+    'footer.resources': 'संसाधन',
+    'footer.governmentPortal': 'सरकारी पोर्टल',
+    'footer.officialSchemes': 'आधिकारिक योजनाएं',
+    'footer.documentation': 'दस्तावेज़ीकरण',
+    'footer.apiAccess': 'API एक्सेस',
+    'footer.contact': 'संपर्क',
+    'footer.copyright': 'सभी अधिकार सुरक्षित।',
+    'footer.termsOfService': 'सेवा की शर्तें',
+    'footer.cookiePolicy': 'कुकी नीति',
+  }
+};
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState<Language>(() => {
+    const saved = localStorage.getItem('language');
+    return (saved as Language) || 'en';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
+  }, [language]);
+
+  const t = (key: string): string => {
+    return translations[language][key as keyof typeof translations[typeof language]] || key;
+  };
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};

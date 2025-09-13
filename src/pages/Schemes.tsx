@@ -14,20 +14,22 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-const categories: { value: SchemeCategory; label: string }[] = [
-  { value: 'education', label: 'Education' },
-  { value: 'health', label: 'Health' },
-  { value: 'agriculture', label: 'Agriculture' },
-  { value: 'rural-development', label: 'Rural Development' },
-  { value: 'women-empowerment', label: 'Women Empowerment' },
-  { value: 'employment', label: 'Employment' },
-  { value: 'housing', label: 'Housing' },
-  { value: 'skill-development', label: 'Skill Development' },
-  { value: 'senior-citizen', label: 'Senior Citizen' },
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Schemes() {
+  const { t } = useLanguage();
+  
+  const categories: { value: SchemeCategory; label: string }[] = [
+    { value: 'education', label: t('schemes.categories.education') },
+    { value: 'health', label: t('schemes.categories.health') },
+    { value: 'agriculture', label: t('schemes.categories.agriculture') },
+    { value: 'rural-development', label: t('schemes.categories.ruralDevelopment') },
+    { value: 'women-empowerment', label: t('schemes.categories.womenEmpowerment') },
+    { value: 'employment', label: t('schemes.categories.employment') },
+    { value: 'housing', label: t('schemes.categories.housing') },
+    { value: 'skill-development', label: t('schemes.categories.skillDevelopment') },
+    { value: 'senior-citizen', label: t('schemes.categories.seniorCitizen') },
+  ];
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
@@ -97,77 +99,83 @@ export default function Schemes() {
   });
 
   const SchemeCard = ({ scheme }: { scheme: Scheme }) => (
-    <Card className="shadow-card hover:shadow-card-hover transition-all duration-300 group">
-      <CardHeader>
-        <div className="flex justify-between items-start mb-2">
+    <Card className="modern-card group">
+      <CardHeader className="pb-4">
+        <div className="flex justify-between items-start mb-3">
           <Badge 
             variant={scheme.status === 'active' ? 'default' : scheme.status === 'upcoming' ? 'secondary' : 'outline'}
-            className={scheme.status === 'active' ? 'bg-secondary' : ''}
+            className={`text-xs ${
+              scheme.status === 'active' 
+                ? 'bg-black text-white' 
+                : scheme.status === 'upcoming' 
+                ? 'bg-gray-100 text-gray-700' 
+                : 'bg-white text-gray-600 border-gray-300'
+            }`}
           >
             {scheme.status.charAt(0).toUpperCase() + scheme.status.slice(1)}
           </Badge>
           
           {scheme.isVerified && (
-            <div className="flex items-center space-x-1 text-secondary">
+            <div className="flex items-center space-x-1 text-green-600">
               <CheckCircle className="h-4 w-4" />
-              <span className="text-xs font-medium">AI Verified</span>
+              <span className="text-xs font-medium">{t('schemes.aiVerified')}</span>
             </div>
           )}
         </div>
         
-        <CardTitle className="text-lg group-hover:text-primary transition-colors">
-          <Link to={`/scheme/${scheme.id}`}>
+        <CardTitle className="text-xl group-hover:text-gray-700 transition-colors mb-2">
+          <Link to={`/scheme/${scheme.id}`} className="hover:underline">
             {scheme.title}
           </Link>
         </CardTitle>
         
-        <CardDescription className="line-clamp-2">
+        <CardDescription className="text-gray-600 line-clamp-2 leading-relaxed">
           {scheme.description}
         </CardDescription>
       </CardHeader>
       
       <CardContent className="space-y-4">
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-2">
           {scheme.tags.slice(0, 3).map((tag, index) => (
-            <Badge key={index} variant="outline" className="text-xs">
+            <Badge key={index} variant="outline" className="text-xs bg-gray-50 text-gray-600 border-gray-200">
               {tag}
             </Badge>
           ))}
           {scheme.tags.length > 3 && (
-            <Badge variant="outline" className="text-xs">
-              +{scheme.tags.length - 3} more
+            <Badge variant="outline" className="text-xs bg-gray-50 text-gray-600 border-gray-200">
+              +{scheme.tags.length - 3} {t('schemes.more')}
             </Badge>
           )}
         </div>
         
-        <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center space-x-1">
+        <div className="grid grid-cols-2 gap-4 text-sm text-gray-500">
+          <div className="flex items-center space-x-2">
             <Calendar className="h-4 w-4" />
-            <span>Deadline: {scheme.applicationDeadline.toLocaleDateString()}</span>
+            <span>{t('schemes.deadline')}: {scheme.applicationDeadline.toLocaleDateString()}</span>
           </div>
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-2">
             <MapPin className="h-4 w-4" />
             <span>{scheme.location[0]}</span>
           </div>
         </div>
         
         {scheme.beneficiaryCount && (
-          <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+          <div className="flex items-center space-x-2 text-sm text-gray-500">
             <Users className="h-4 w-4" />
-            <span>{scheme.beneficiaryCount.toLocaleString()} beneficiaries</span>
+            <span>{scheme.beneficiaryCount.toLocaleString()} {t('schemes.beneficiaries')}</span>
           </div>
         )}
         
-        <div className="flex space-x-2 pt-2">
-          <Button size="sm" className="flex-1" asChild>
+        <div className="flex space-x-3 pt-4">
+          <Button size="sm" className="flex-1 modern-button-outline" asChild>
             <Link to={`/scheme/${scheme.id}`}>
-              View Details
+              {t('schemes.viewDetails')}
             </Link>
           </Button>
-          <Button size="sm" variant="outline" asChild>
+          <Button size="sm" className="modern-button" asChild>
             <a href={scheme.applyLink} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-3 w-3 mr-1" />
-              Apply
+              <ExternalLink className="h-4 w-4 mr-2" />
+              {t('schemes.apply')}
             </a>
           </Button>
         </div>
@@ -176,29 +184,29 @@ export default function Schemes() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-white">
+      <div className="container mx-auto px-4 py-12">
         {/* Header */}
-        <div className="text-center space-y-4 mb-12">
-          <h1 className="text-4xl font-bold">Government Schemes</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover and apply for government schemes with AI-powered verification and smart filtering
+        <div className="text-center space-y-6 mb-16">
+          <h1 className="text-5xl font-bold text-black">{t('schemes.title')}</h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            {t('schemes.subtitle')}
           </p>
           <Dialog open={isSubmitOpen} onOpenChange={setIsSubmitOpen}>
             <DialogTrigger asChild>
-              <Button className="mt-2"><PlusCircle className="h-4 w-4 mr-2" />Submit a Scheme</Button>
+              <Button className="modern-button mt-4"><PlusCircle className="h-4 w-4 mr-2" />{t('schemes.submitScheme')}</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Submit a New Scheme</DialogTitle>
+                <DialogTitle>{t('schemes.submitNewScheme')}</DialogTitle>
               </DialogHeader>
               <Form {...(form as any)}>
                 <form onSubmit={onSubmit} className="space-y-4">
                   <FormField control={form.control} name="title" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>{t('schemes.form.title')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Official scheme title" {...field} />
+                        <Input placeholder={t('schemes.form.titlePlaceholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -206,11 +214,11 @@ export default function Schemes() {
 
                   <FormField control={form.control} name="description" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{t('schemes.form.description')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Concise official description" {...field} />
+                        <Input placeholder={t('schemes.form.descriptionPlaceholder')} {...field} />
                       </FormControl>
-                      <FormDescription>Include purpose, key benefit, and eligibility summary.</FormDescription>
+                      <FormDescription>{t('schemes.form.descriptionHelp')}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )} />
@@ -218,7 +226,7 @@ export default function Schemes() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <FormField control={form.control} name="category" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Category</FormLabel>
+                        <FormLabel>{t('schemes.form.category')}</FormLabel>
                         <Select value={field.value} onValueChange={field.onChange}>
                           <FormControl>
                             <SelectTrigger>
@@ -237,7 +245,7 @@ export default function Schemes() {
 
                     <FormField control={form.control} name="deadline" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Application Deadline</FormLabel>
+                        <FormLabel>{t('schemes.form.deadline')}</FormLabel>
                         <FormControl>
                           <Input type="date" value={String(field.value).slice(0,10)} onChange={field.onChange} />
                         </FormControl>
@@ -249,20 +257,20 @@ export default function Schemes() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <FormField control={form.control} name="applyLink" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Official Apply Link</FormLabel>
+                        <FormLabel>{t('schemes.form.applyLink')}</FormLabel>
                         <FormControl>
-                          <Input placeholder="https://example.gov.in/..." {...field} />
+                          <Input placeholder={t('schemes.form.applyLinkPlaceholder')} {...field} />
                         </FormControl>
-                        <FormDescription>Only .gov.in or .nic.in links are accepted.</FormDescription>
+                        <FormDescription>{t('schemes.form.applyLinkHelp')}</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )} />
 
                     <FormField control={form.control} name="location" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Primary Location</FormLabel>
+                        <FormLabel>{t('schemes.form.location')}</FormLabel>
                         <FormControl>
-                          <Input placeholder="All India / State / Region" {...field} />
+                          <Input placeholder={t('schemes.form.locationPlaceholder')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -271,16 +279,16 @@ export default function Schemes() {
 
                   <FormField control={form.control} name="tags" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tags (comma separated)</FormLabel>
+                      <FormLabel>{t('schemes.form.tags')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="scholarship, health, subsidy" {...field} />
+                        <Input placeholder={t('schemes.form.tagsPlaceholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
 
                   <div className="flex justify-end gap-2 pt-2">
-                    <Button type="submit">Submit for Review</Button>
+                    <Button type="submit">{t('schemes.form.submit')}</Button>
                   </div>
                 </form>
               </Form>
@@ -289,24 +297,24 @@ export default function Schemes() {
         </div>
 
         {/* Search and Filters */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-6 mb-12">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search schemes by title, description, or tags..."
+                placeholder={t('schemes.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white border-gray-300 focus:border-black focus:ring-black"
               />
             </div>
             
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="All Categories" />
+              <SelectTrigger className="w-full md:w-48 bg-white border-gray-300 focus:border-black focus:ring-black">
+                <SelectValue placeholder={t('schemes.allCategories')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="all">{t('schemes.allCategories')}</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.value} value={category.value}>
                     {category.label}
@@ -316,11 +324,11 @@ export default function Schemes() {
             </Select>
             
             <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="All Locations" />
+              <SelectTrigger className="w-full md:w-48 bg-white border-gray-300 focus:border-black focus:ring-black">
+                <SelectValue placeholder={t('schemes.allLocations')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
+                <SelectItem value="all">{t('schemes.allLocations')}</SelectItem>
                 <SelectItem value="all india">All India</SelectItem>
                 <SelectItem value="urban">Urban Areas</SelectItem>
                 <SelectItem value="rural">Rural Areas</SelectItem>
@@ -330,24 +338,24 @@ export default function Schemes() {
         </div>
 
         {/* Tabs for scheme status */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto">
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-            <TabsTrigger value="active">Current</TabsTrigger>
-            <TabsTrigger value="expired">Past</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-3 max-w-lg mx-auto bg-gray-100 p-1">
+            <TabsTrigger value="upcoming" className="data-[state=active]:bg-white data-[state=active]:text-black">{t('schemes.upcoming')}</TabsTrigger>
+            <TabsTrigger value="active" className="data-[state=active]:bg-white data-[state=active]:text-black">{t('schemes.current')}</TabsTrigger>
+            <TabsTrigger value="expired" className="data-[state=active]:bg-white data-[state=active]:text-black">{t('schemes.past')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="upcoming" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Upcoming Schemes</h2>
-              <Badge variant="secondary">{getSchemesByStatus('upcoming').length} schemes</Badge>
+              <h2 className="text-2xl font-semibold">{t('schemes.upcomingSchemes')}</h2>
+              <Badge variant="secondary">{getSchemesByStatus('upcoming').length} {t('schemes.schemes')}</Badge>
             </div>
             
             {filteredSchemes.length === 0 ? (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No upcoming schemes found</h3>
-                <p className="text-muted-foreground">Try adjusting your filters or check back later for new schemes.</p>
+                <h3 className="text-lg font-medium mb-2">{t('schemes.noUpcomingFound')}</h3>
+                <p className="text-muted-foreground">{t('schemes.noUpcomingDesc')}</p>
               </Card>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -360,15 +368,15 @@ export default function Schemes() {
 
           <TabsContent value="active" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Current Active Schemes</h2>
-              <Badge className="bg-secondary">{getSchemesByStatus('active').length} schemes</Badge>
+              <h2 className="text-2xl font-semibold">{t('schemes.currentSchemes')}</h2>
+              <Badge className="bg-secondary">{getSchemesByStatus('active').length} {t('schemes.schemes')}</Badge>
             </div>
             
             {filteredSchemes.length === 0 ? (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No active schemes found</h3>
-                <p className="text-muted-foreground">Try adjusting your filters to find relevant schemes.</p>
+                <h3 className="text-lg font-medium mb-2">{t('schemes.noActiveFound')}</h3>
+                <p className="text-muted-foreground">{t('schemes.noActiveDesc')}</p>
               </Card>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -381,15 +389,15 @@ export default function Schemes() {
 
           <TabsContent value="expired" className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Past Schemes</h2>
-              <Badge variant="outline">{getSchemesByStatus('expired').length} schemes</Badge>
+              <h2 className="text-2xl font-semibold">{t('schemes.pastSchemes')}</h2>
+              <Badge variant="outline">{getSchemesByStatus('expired').length} {t('schemes.schemes')}</Badge>
             </div>
             
             {filteredSchemes.length === 0 ? (
               <Card className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No past schemes found</h3>
-                <p className="text-muted-foreground">Try adjusting your filters or explore current schemes.</p>
+                <h3 className="text-lg font-medium mb-2">{t('schemes.noPastFound')}</h3>
+                <p className="text-muted-foreground">{t('schemes.noPastDesc')}</p>
               </Card>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

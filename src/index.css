@@ -2,74 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SchemeConnect Design System - Government portal with modern SaaS aesthetics */
+/* Modern Black & White Design System - Inspired by Untitled UI */
 
 @layer base {
   :root {
-    /* Clean minimal palette inspired by reference designs */
+    /* Pure black and white palette */
     --background: 0 0% 100%; /* Pure white */
-    --foreground: 0 0% 9%; /* Near black for text */
+    --foreground: 0 0% 0%; /* Pure black for text */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 0%;
 
-    /* Primary - Premium blue palette */
-    --primary: 221 83% 53%; /* blue-600 */
+    /* Primary - Pure black */
+    --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 221 83% 65%;
-    --primary-dark: 221 83% 40%;
 
-    /* Secondary - Neutral gray */
-    --secondary: 220 14% 96%; /* gray-100 */
-    --secondary-foreground: 0 0% 9%;
+    /* Secondary - Light gray */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    /* Accent - Electric indigo for gradients */  
-    --accent: 258 90% 66%; /* indigo-500 */
+    /* Accent - Medium gray */  
+    --accent: 0 0% 50%;
     --accent-foreground: 0 0% 100%;
 
-    /* Neutral system - Very subtle */
-    --muted: 220 14% 96%; /* gray-100 */
-    --muted-foreground: 0 0% 45%; /* gray-600 */
+    /* Neutral system */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%; /* Very light gray borders */
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 0 0% 90%;
+    --input: 0 0% 96%;
+    --ring: 0 0% 0%;
 
-    --radius: 0.5rem; /* Smaller radius for cleaner look */
+    --radius: 0.375rem; /* Smaller radius for modern look */
 
-    /* Minimal gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
-    --gradient-hero: radial-gradient(60% 100% at 80% 50%, hsl(var(--accent) / 0.35) 0%, transparent 60%),
-      radial-gradient(60% 100% at 20% 40%, hsl(0 0% 100% / 0.6) 0%, transparent 60%),
-      linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--accent) / 0.08));
+    /* Clean shadows */
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     
-    /* Subtle shadows */
-    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
-    --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-    
-    /* Clean transitions */
-    --transition-smooth: all 0.2s ease-out;
+    /* Smooth transitions */
+    --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --primary: 158 64% 52%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 60%;
+    --border: 0 0% 20%;
+    --input: 0 0% 10%;
   }
 }
 
@@ -79,24 +71,13 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
-    background-image: radial-gradient(1200px 600px at 20% -10%, rgb(59 130 246 / 0.08), transparent 60%),
-      radial-gradient(1200px 600px at 80% 110%, rgb(99 102 241 / 0.08), transparent 60%);
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
   
-  /* Custom utility classes */
-  .gradient-primary {
-    background: var(--gradient-primary);
-  }
-  
-  .gradient-secondary {
-    background: var(--gradient-secondary);
-  }
-  
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-  
+  /* Clean utility classes */
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
@@ -105,160 +86,33 @@
     box-shadow: var(--shadow-card-hover);
   }
   
-  .shadow-glow {
-    box-shadow: var(--shadow-glow);
-  }
-  
   .transition-smooth {
     transition: var(--transition-smooth);
   }
 }
 
 @layer components {
-  .glass-card {
-    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-card;
+  .modern-card {
+    @apply bg-white border border-gray-200 shadow-card hover:shadow-card-hover transition-smooth;
   }
-  .pill {
-    @apply rounded-full border border-white/20 bg-white/60 backdrop-blur-md shadow-card;
+  
+  .modern-button {
+    @apply bg-black text-white hover:bg-gray-800 transition-smooth font-medium;
+  }
+  
+  .modern-button-outline {
+    @apply bg-white text-black border border-gray-300 hover:bg-gray-50 transition-smooth font-medium;
   }
 }
 
-/* Animations */
+/* Simple animations */
 @keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(12px); }
+  0% { opacity: 0; transform: translateY(8px); }
   100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-@keyframes tiltSlow {
-  0%, 100% { transform: rotate(var(--tilt-base, 0deg)); }
-  50% { transform: rotate(calc(var(--tilt-base, 0deg) + 1.2deg)); }
-}
-
-@keyframes circularFloat {
-  0% { transform: translateX(calc(var(--base-x, 0px) + var(--orbit-radius, 16px))) translateY(calc(var(--base-y, 0px) + 0px)) rotate(var(--base-rot, 0deg)); }
-  25% { transform: translateX(calc(var(--base-x, 0px) + 0px)) translateY(calc(var(--base-y, 0px) - var(--orbit-radius, 16px))) rotate(var(--base-rot, 0deg)); }
-  50% { transform: translateX(calc(var(--base-x, 0px) - var(--orbit-radius, 16px))) translateY(calc(var(--base-y, 0px) + 0px)) rotate(var(--base-rot, 0deg)); }
-  75% { transform: translateX(calc(var(--base-x, 0px) + 0px)) translateY(calc(var(--base-y, 0px) + var(--orbit-radius, 16px))) rotate(var(--base-rot, 0deg)); }
-  100% { transform: translateX(calc(var(--base-x, 0px) + var(--orbit-radius, 16px))) translateY(calc(var(--base-y, 0px) + 0px)) rotate(var(--base-rot, 0deg)); }
-}
-
-@keyframes fanIn {
-  0% { opacity: 0; transform: translateY(24px) scale(0.98) rotate(var(--start-rot, 0deg)); }
-  100% { opacity: 1; transform: translateY(20px) scale(1) rotate(var(--end-rot, 0deg)); }
 }
 
 @layer utilities {
   .animate-fade-up {
-    animation: fadeUp 600ms var(--ease, cubic-bezier(0.22,1,0.36,1)) both;
-  }
-  .animate-float-slow {
-    animation: floatSlow 6s ease-in-out infinite;
-  }
-  .animate-tilt-slow {
-    animation: tiltSlow 9s ease-in-out infinite;
-  }
-  .animate-circular-float {
-    animation: circularFloat var(--orbit-duration, 8s) ease-in-out infinite;
-    animation-delay: var(--orbit-delay, 0ms);
-  }
-  .animate-fan-in {
-    animation: fanIn 700ms cubic-bezier(0.22,1,0.36,1) forwards;
-  }
-  /* Subtle ambient gradient drift for hero backgrounds */
-  @keyframes heroGradientDrift {
-    0% { background-position: 0% 0%, 100% 100%, 50% 50%; }
-    50% { background-position: 100% 0%, 0% 100%, 60% 60%; }
-    100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
-  }
-  .animate-hero-gradient {
-    background-size: 140% 140%, 160% 160%, 120% 120%;
-    animation: heroGradientDrift 28s linear infinite;
-    will-change: background-position;
-  }
-  @keyframes rotateAmbient {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-  .ambient-rotate-gradient {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 160%;
-    height: 160%;
-    transform: translate(-50%, -50%);
-    background: conic-gradient(from 0deg at 50% 50%,
-      transparent 0deg,
-      rgba(99,102,241,0.28) 36deg, /* indigo */
-      transparent 66deg,
-      rgba(59,130,246,0.24) 110deg, /* blue */
-      transparent 150deg,
-      rgba(236,72,153,0.22) 192deg, /* pink */
-      transparent 228deg,
-      rgba(14,165,233,0.22) 268deg, /* sky */
-      transparent 304deg,
-      rgba(139,92,246,0.26) 340deg, /* violet */
-      transparent 360deg);
-    filter: blur(70px);
-    opacity: 0.5;
-    mix-blend-mode: screen;
-    pointer-events: none;
-    animation: rotateAmbient 80s linear infinite;
-  }
-
-  /* Premium animated gradient glow behind hero card */
-  @keyframes glowOrbit {
-    0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-    50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.02); }
-    100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
-  }
-  .hero-premium-glow {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 120%;
-    height: 140%;
-    transform: translate(-50%, -50%);
-    border-radius: 24px;
-    pointer-events: none;
-    background:
-      radial-gradient(60% 60% at 50% 40%, rgba(59,130,246,0.18), rgba(59,130,246,0) 60%),
-      radial-gradient(60% 60% at 50% 60%, rgba(139,92,246,0.18), rgba(139,92,246,0) 65%),
-      conic-gradient(from 0deg at 50% 50%, rgba(14,165,233,0.18), rgba(236,72,153,0.14), rgba(99,102,241,0.18), rgba(59,130,246,0.16), rgba(14,165,233,0.18));
-    filter: blur(80px);
-    opacity: 0.5;
-    mix-blend-mode: screen;
-    animation: glowOrbit 42s linear infinite;
-    will-change: transform;
-  }
-
-  /* Diagonal band glow like reference */
-  @keyframes bandsDrift {
-    0% { background-position: 0 0; }
-    100% { background-position: 300px 300px; }
-  }
-  .hero-diagonal-bands {
-    position: absolute;
-    inset: -10%;
-    pointer-events: none;
-    background:
-      repeating-linear-gradient(135deg,
-        rgba(99,102,241,0.10) 0px,
-        rgba(99,102,241,0.10) 2px,
-        transparent 2px,
-        transparent 58px,
-        rgba(236,72,153,0.10) 58px,
-        rgba(236,72,153,0.10) 60px,
-        transparent 60px,
-        transparent 116px);
-    filter: blur(24px);
-    opacity: 0.35;
-    mix-blend-mode: overlay;
-    animation: bandsDrift 60s linear infinite;
-    will-change: background-position;
+    animation: fadeUp 0.4s ease-out both;
   }
 }

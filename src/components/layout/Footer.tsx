@@ -1,52 +1,56 @@
 import { Link } from 'react-router-dom';
 import { Shield, Twitter, Facebook, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const Footer = () => {
+  const { t } = useLanguage();
+  
   const footerLinks = {
     platform: [
-      { name: 'Browse Schemes', href: '/schemes' },
-      { name: 'How it Works', href: '/how-it-works' },
-      { name: 'AI Verification', href: '/ai-verification' },
-      { name: 'Voice Assistant', href: '/voice-assistant' },
+      { name: t('footer.browseSchemes'), href: '/schemes' },
+      { name: t('footer.howItWorks'), href: '/how-it-works' },
+      { name: t('footer.aiVerification'), href: '/ai-verification' },
+      { name: t('footer.voiceAssistant'), href: '/voice-assistant' },
     ],
     support: [
-      { name: 'Help Center', href: '/help' },
-      { name: 'Contact Us', href: '/contact' },
-      { name: 'FAQ', href: '/faq' },
-      { name: 'Privacy Policy', href: '/privacy' },
+      { name: t('footer.helpCenter'), href: '/help' },
+      { name: t('footer.contactUs'), href: '/contact' },
+      { name: t('footer.faq'), href: '/faq' },
+      { name: t('footer.privacyPolicy'), href: '/privacy' },
     ],
     resources: [
-      { name: 'Government Portal', href: 'https://india.gov.in' },
-      { name: 'Official Schemes', href: 'https://www.myscheme.gov.in' },
-      { name: 'Documentation', href: '/docs' },
-      { name: 'API Access', href: '/api' },
+      { name: t('footer.governmentPortal'), href: 'https://india.gov.in' },
+      { name: t('footer.officialSchemes'), href: 'https://www.myscheme.gov.in' },
+      { name: t('footer.documentation'), href: '/docs' },
+      { name: t('footer.apiAccess'), href: '/api' },
     ],
   };
 
   return (
-    <footer className="bg-card border-t border-border">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="bg-white border-t border-gray-200">
+      <div className="container mx-auto px-4 py-16">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Brand */}
-          <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold">
-                Scheme<span className="text-primary">Connect</span>
+          <div className="space-y-6">
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                <Shield className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-black">
+                SchemeConnect
               </span>
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              AI-powered government scheme discovery platform helping citizens 
-              find and access legitimate government benefits with confidence.
+            <p className="text-gray-600 text-sm leading-relaxed">
+              {t('footer.description')}
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="#" className="text-gray-400 hover:text-black transition-colors">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="#" className="text-gray-400 hover:text-black transition-colors">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="#" className="text-gray-400 hover:text-black transition-colors">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -54,13 +58,13 @@ export const Footer = () => {
 
           {/* Platform Links */}
           <div>
-            <h3 className="font-semibold mb-4">Platform</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold mb-6 text-black">{t('footer.platform')}</h3>
+            <ul className="space-y-4">
               {footerLinks.platform.map((link) => (
                 <li key={link.name}>
                   <Link 
                     to={link.href} 
-                    className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+                    className="text-gray-600 hover:text-black transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
@@ -71,13 +75,13 @@ export const Footer = () => {
 
           {/* Support Links */}
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold mb-6 text-black">{t('footer.support')}</h3>
+            <ul className="space-y-4">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
                   <Link 
                     to={link.href} 
-                    className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+                    className="text-gray-600 hover:text-black transition-colors text-sm"
                   >
                     {link.name}
                   </Link>
@@ -88,17 +92,17 @@ export const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="font-semibold mb-4">Contact</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <h3 className="font-semibold mb-6 text-black">{t('footer.contact')}</h3>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Mail className="h-4 w-4" />
                 <span>support@schemeconnect.gov</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Phone className="h-4 w-4" />
                 <span>1800-XXX-XXXX (Toll Free)</span>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <MapPin className="h-4 w-4" />
                 <span>New Delhi, India</span>
               </div>
@@ -106,28 +110,28 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} SchemeConnect. All rights reserved.
+        <div className="border-t border-gray-200 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p className="text-sm text-gray-600">
+            © {new Date().getFullYear()} SchemeConnect. {t('footer.copyright')}
           </p>
-          <div className="flex space-x-6 text-sm">
+          <div className="flex space-x-8 text-sm">
             <Link 
               to="/privacy" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="text-gray-600 hover:text-black transition-colors"
             >
-              Privacy Policy
+              {t('footer.privacyPolicy')}
             </Link>
             <Link 
               to="/terms" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="text-gray-600 hover:text-black transition-colors"
             >
-              Terms of Service
+              {t('footer.termsOfService')}
             </Link>
             <Link 
               to="/cookies" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="text-gray-600 hover:text-black transition-colors"
             >
-              Cookie Policy
+              {t('footer.cookiePolicy')}
             </Link>
           </div>
         </div>

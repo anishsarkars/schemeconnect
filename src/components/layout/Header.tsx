@@ -2,44 +2,52 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Shield, User, LogOut } from 'lucide-react';
+import { Menu, User, LogOut, MessageCircle } from 'lucide-react';
 import { VoiceAssistant } from '@/components/features/VoiceAssistant';
+import { LanguageToggle } from '@/components/ui/language-toggle';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const isAuthenticated = false; // TODO: Connect to auth
+  const { t } = useLanguage();
 
   const navigation = [
-    { name: 'Home', href: '/', current: location.pathname === '/' },
-    { name: 'Schemes', href: '/schemes', current: location.pathname === '/schemes' },
+    { name: 'Solutions', href: '/schemes', current: location.pathname === '/schemes' },
+    { name: 'Farm Management', href: '/farm-management', current: location.pathname === '/farm-management' },
+    { name: 'Analytics', href: '/analytics', current: location.pathname === '/analytics' },
+    { name: 'Contact', href: '/contact', current: location.pathname === '/contact' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="relative">
-              <Shield className="h-8 w-8 text-primary transition-transform group-hover:scale-105" />
-              <div className="absolute inset-0 bg-primary/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" strokeWidth="2" fill="none" />
+                <path d="M17.66 6.34l-4.24 4.24m0 0l-4.24 4.24m4.24-4.24L6.34 6.34m11.32 11.32l-4.24-4.24" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              </svg>
             </div>
-            <span className="text-xl font-bold text-foreground">
-              Scheme<span className="text-primary">Connect</span>
+            <span className="text-xl font-bold text-blue-900">
+              Solar
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 pill px-1 py-1">
+          <nav className="hidden md:flex items-center space-x-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`text-sm font-medium transition-colors ${
                   item.current
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'text-black'
+                    : 'text-gray-600 hover:text-black'
                 }`}
               >
                 {item.name}
@@ -50,24 +58,25 @@ export const Header = () => {
           {/* Voice Assistant & Auth */}
           <div className="flex items-center space-x-3">
             <VoiceAssistant />
+            <LanguageToggle />
             
             {isAuthenticated ? (
               <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="text-gray-600 hover:text-black">
                   <User className="h-4 w-4 mr-2" />
-                  Profile
+                  {t('nav.profile')}
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="text-gray-600 hover:text-black">
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
             ) : (
               <div className="hidden md:flex items-center space-x-2">
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="outline" size="sm" className="text-gray-600 hover:text-black border-gray-300" asChild>
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button size="sm" asChild>
-                  <Link to="/signup">Sign Up</Link>
+                <Button size="sm" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50" asChild>
+                  <Link to="/signup">Get a quote</Link>
                 </Button>
               </div>
             )}
@@ -97,13 +106,16 @@ export const Header = () => {
                   ))}
                   
                   <div className="pt-4 border-t border-border space-y-2">
+                    <div className="px-4 py-2">
+                      <LanguageToggle />
+                    </div>
                     {!isAuthenticated && (
                       <>
                         <Button variant="ghost" className="w-full justify-start" asChild>
                           <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
                         </Button>
-                        <Button className="w-full" asChild>
-                          <Link to="/signup" onClick={() => setIsOpen(false)}>Sign Up</Link>
+                        <Button className="w-full border-gray-300 text-gray-700 hover:bg-gray-50" variant="outline" asChild>
+                          <Link to="/signup" onClick={() => setIsOpen(false)}>Get a quote</Link>
                         </Button>
                       </>
                     )}

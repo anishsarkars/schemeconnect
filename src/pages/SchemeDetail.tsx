@@ -16,22 +16,24 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { sampleSchemes } from '@/data/sampleSchemes';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function SchemeDetail() {
   const { id } = useParams<{ id: string }>();
   const scheme = sampleSchemes.find(s => s.id === id);
+  const { t } = useLanguage();
 
   if (!scheme) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="p-8 text-center max-w-md">
           <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Scheme Not Found</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('schemeDetail.notFound')}</h2>
           <p className="text-muted-foreground mb-4">
-            The scheme you're looking for doesn't exist or has been removed.
+            {t('schemeDetail.notFoundDesc')}
           </p>
           <Button asChild>
-            <Link to="/schemes">Browse All Schemes</Link>
+            <Link to="/schemes">{t('schemeDetail.browseAll')}</Link>
           </Button>
         </Card>
       </div>
@@ -45,7 +47,7 @@ export default function SchemeDetail() {
         <Button variant="ghost" className="mb-6" asChild>
           <Link to="/schemes">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Schemes
+            {t('schemeDetail.backToSchemes')}
           </Link>
         </Button>
 
@@ -87,13 +89,13 @@ export default function SchemeDetail() {
             {/* Key Information */}
             <Card>
               <CardHeader>
-                <CardTitle>Key Information</CardTitle>
+                <CardTitle>{t('schemeDetail.keyInformation')}</CardTitle>
               </CardHeader>
               <CardContent className="grid md:grid-cols-2 gap-6">
                 <div className="flex items-center space-x-3">
                   <Calendar className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-medium">Application Deadline</p>
+                    <p className="font-medium">{t('schemeDetail.applicationDeadline')}</p>
                     <p className="text-muted-foreground">{scheme.applicationDeadline.toLocaleDateString('en-IN', { 
                       year: 'numeric', 
                       month: 'long', 
@@ -105,7 +107,7 @@ export default function SchemeDetail() {
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-medium">Coverage Area</p>
+                    <p className="font-medium">{t('schemeDetail.coverageArea')}</p>
                     <p className="text-muted-foreground">{scheme.location.join(', ')}</p>
                   </div>
                 </div>
@@ -114,8 +116,8 @@ export default function SchemeDetail() {
                   <div className="flex items-center space-x-3">
                     <Users className="h-5 w-5 text-primary" />
                     <div>
-                      <p className="font-medium">Target Beneficiaries</p>
-                      <p className="text-muted-foreground">{scheme.beneficiaryCount.toLocaleString()} people</p>
+                      <p className="font-medium">{t('schemeDetail.targetBeneficiaries')}</p>
+                      <p className="text-muted-foreground">{scheme.beneficiaryCount.toLocaleString()} {t('schemeDetail.people')}</p>
                     </div>
                   </div>
                 )}
@@ -123,7 +125,7 @@ export default function SchemeDetail() {
                 <div className="flex items-center space-x-3">
                   <Calendar className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-medium">Launch Date</p>
+                    <p className="font-medium">{t('schemeDetail.launchDate')}</p>
                     <p className="text-muted-foreground">{scheme.launchDate.toLocaleDateString('en-IN', { 
                       year: 'numeric', 
                       month: 'long', 
@@ -137,7 +139,7 @@ export default function SchemeDetail() {
             {/* Eligibility Criteria */}
             <Card>
               <CardHeader>
-                <CardTitle>Eligibility Criteria</CardTitle>
+                <CardTitle>{t('schemeDetail.eligibilityCriteria')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
@@ -155,7 +157,7 @@ export default function SchemeDetail() {
             {scheme.documents.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Required Documents</CardTitle>
+                  <CardTitle>{t('schemeDetail.requiredDocuments')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-3">
@@ -186,16 +188,16 @@ export default function SchemeDetail() {
             {/* Apply Card */}
             <Card className="bg-gradient-primary text-white">
               <CardHeader>
-                <CardTitle className="text-white">Ready to Apply?</CardTitle>
+                <CardTitle className="text-white">{t('schemeDetail.readyToApply')}</CardTitle>
                 <CardDescription className="text-white/80">
-                  Apply directly through the official government portal
+                  {t('schemeDetail.applyDescription')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Button size="lg" className="w-full bg-white text-primary hover:bg-white/90" asChild>
                   <a href={scheme.applyLink} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="h-4 w-4 mr-2" />
-                    Apply Now
+                    {t('schemeDetail.applyNow')}
                   </a>
                 </Button>
               </CardContent>
@@ -204,7 +206,7 @@ export default function SchemeDetail() {
             {/* Tags */}
             <Card>
               <CardHeader>
-                <CardTitle>Related Tags</CardTitle>
+                <CardTitle>{t('schemeDetail.relatedTags')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
@@ -223,12 +225,12 @@ export default function SchemeDetail() {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Shield className="h-5 w-5 text-secondary" />
-                    <span>AI Verification</span>
+                    <span>{t('schemeDetail.aiVerification')}</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm">Authenticity Score</span>
+                    <span className="text-sm">{t('schemeDetail.authenticityScore')}</span>
                     <span className="font-bold text-secondary">{scheme.aiVerificationScore}%</span>
                   </div>
                   
@@ -240,13 +242,12 @@ export default function SchemeDetail() {
                   </div>
                   
                   <p className="text-sm text-muted-foreground">
-                    This scheme has been verified by our AI system against official government databases 
-                    and documentation for authenticity and accuracy.
+                    {t('schemeDetail.verificationDesc')}
                   </p>
                   
                   <div className="flex items-center space-x-2 text-sm text-secondary">
                     <CheckCircle className="h-4 w-4" />
-                    <span>Verified with official sources</span>
+                    <span>{t('schemeDetail.verifiedWithSources')}</span>
                   </div>
                 </CardContent>
               </Card>
