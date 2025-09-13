@@ -17,11 +17,11 @@ export const VoiceAssistant = ({ className }: VoiceAssistantProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Initialize speech recognition
+    // Initialize speech recognition..
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognitionConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognitionConstructor();
-      
+
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
       recognitionRef.current.lang = 'en-US';
@@ -71,7 +71,7 @@ export const VoiceAssistant = ({ className }: VoiceAssistantProps) => {
     try {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      
+
       if (recognitionRef.current) {
         setTranscript('');
         setResponse('');
@@ -98,17 +98,17 @@ export const VoiceAssistant = ({ className }: VoiceAssistantProps) => {
       // Mock AI processing - replace with actual API call
       const mockResponse = generateMockResponse(query);
       setResponse(mockResponse);
-      
+
       // Text-to-speech response
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(mockResponse);
         utterance.rate = 0.9;
         utterance.pitch = 1;
         utterance.volume = 0.8;
-        
+
         utterance.onstart = () => setIsPlaying(true);
         utterance.onend = () => setIsPlaying(false);
-        
+
         speechSynthesis.speak(utterance);
       }
     } catch (error) {
@@ -123,7 +123,7 @@ export const VoiceAssistant = ({ className }: VoiceAssistantProps) => {
 
   const generateMockResponse = (query: string): string => {
     const lowerQuery = query.toLowerCase();
-    
+
     if (lowerQuery.includes('education') || lowerQuery.includes('scholarship')) {
       return "I found 5 active education schemes including PM Scholarship for students. The application deadline is March 31st, 2024.";
     } else if (lowerQuery.includes('health') || lowerQuery.includes('medical')) {
